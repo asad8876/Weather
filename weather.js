@@ -9,17 +9,22 @@ function getWeather() {
     .then(response => response.json())
     .then(data => {
 
+      const location = data.location.name;
       const tempC = data.current.temp_c;
       const tempF = data.current.temp_f;
       const condition = data.current.condition.text;
-      const windm = data.current.wind_mph;
-      const windk = data.current.wind_kph;
-      const location = data.location.name;
+      const windM = data.current.wind_mph;
+      const windK = data.current.wind_kph;
 
       document.getElementById("result").innerHTML =
-        `Temperature: ${tempC}°C | ${tempF}F <br> Condition: ${condition}`;
+        `Location: ${location}
+        Temperature: ${tempC}°C | ${tempF}F <br> 
+        Condition: ${condition} <br> 
+        Wind: ${windM} | ${windK}`;
     })
     .catch(error => {
       console.log("Error:", error);
     });
 }
+
+    document.getElementById("button").addEventListener("click", getWeather);
