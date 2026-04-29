@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="weather.css">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="weather.css">
+    <script src="weather.js" defer></script>
     <title>Weather Forecast</title>
 </head>
 <body>
+    
     <h1>Weather Updates</h1>
 
-    <input type="text" id="city" placeholder="Enter City">
-    <button onclick="getWeather()">Get Weather</button>
 
-    <h3 id="result"></h3>
+    <div id="output"></div>
+
+
+    <input type="text" id="city" placeholder="Enter City"><br>
+    <button id="button">Get Weather</button>
+
+    <h3 id="result">Result</h3>
 </body>
 </html>
