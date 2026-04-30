@@ -30,13 +30,14 @@ function getWeather() {
 
     document.getElementById("button").addEventListener("click", getWeather);
 
-
+    document.getElementById("currentBtn").addEventListener("click", () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showWeather, showError);
-    } else {
-      document.getElementById("output").innerHTML =
-        "Geolocation not supported.";
-    }
+    navigator.geolocation.getCurrentPosition(showWeather, showError);
+     } else {
+     document.getElementById("output").innerHTML =
+      "Geolocation not supported.";
+     }
+     });
 
 
     function showWeather(position) {
