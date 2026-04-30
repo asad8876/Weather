@@ -1,5 +1,22 @@
 const apiKey = "0196eb753b32483ebb3144743262904";
 
+    function displayWeather(data){
+      const location = data.location.name;
+      const tempC = data.current.temp_c;
+      const tempF = data.current.temp_f;
+      const atmosphere = data.current.condition.text;
+      const windM = data.current.wind_mph;
+      const windK = data.current.wind_kph;
+      const humidity = data.current.humidity;
+
+      document.getElementById("result").innerHTML =
+        `Location: ${location} <br>
+        Temperature: ${tempC}°C | ${tempF}F <br> 
+        Atmosphere: ${atmosphere} <br> 
+        Wind: ${windM} Mph | ${windK} Kph <br>
+        Humidity: ${humidity}%`;
+    }
+
 function getWeather() {
   const city = document.getElementById("city").value.trim();
 
@@ -8,24 +25,8 @@ function getWeather() {
 
   fetch(url)
     .then(response => response.json())
-    .then(data => {
-
-      const location = data.location.name;
-      const tempC = data.current.temp_c;
-      const tempF = data.current.temp_f;
-      const atmosphere = data.current.condition.text;
-      const windM = data.current.wind_mph;
-      const windK = data.current.wind_kph;
-
-      document.getElementById("result").innerHTML =
-        `Location: ${location} <br>
-        Temperature: ${tempC}°C | ${tempF}F <br> 
-        Atmosphere: ${atmosphere} <br> 
-        Wind: ${windM} Mph | ${windK} Kph`;
-    })
-    .catch(error => {
-      console.log("Error:", error);
-    });
+    .then(data => {displayWeather(data)})
+    .catch(error => {console.log("Error:", error);});
 }
 
     document.getElementById("button").addEventListener("click", getWeather);
@@ -34,7 +35,7 @@ function getWeather() {
     if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showWeather, showError);
      } else {
-     document.getElementById("output").innerHTML =
+     document.getElementById("result").innerHTML =
       "Geolocation not supported.";
      }
      });
@@ -48,25 +49,10 @@ function getWeather() {
 
       fetch(url)
         .then(response => response.json())
-        .then(data => {
-          
-          const location = data.location.name;
-          const tempC = data.current.temp_c;
-          const tempF = data.current.temp_f;
-          const atmosphere = data.current.condition.text;
-          const windM = data.current.wind_mph;
-          const windK = data.current.wind_kph;
-
-          document.getElementById("output").innerHTML =
-            `Location: ${location} <br>
-             Temperature: ${tempC}°C | ${tempF}F <br> 
-             Atmosphere: ${atmosphere} <br> 
-             Wind: ${windM} Mph | ${windK} Kph`;
-        })
+        .then(data => {displayWeather(data)})
         .catch(err => {
-          document.getElementById("output").innerHTML = "Error fetching weather.";
-          console.error(err);
-        });
+          document.getElementById("result").innerHTML = "Error fetching weather.";
+          console.error(err);});
     }
 
     function showError() {
