@@ -75,12 +75,12 @@ function showWeather(data) {
 
   const alert = getAlert(current.temp_c);
 
-  resultBox.innerHTML = `
+  resultBox.innerHTML = `<p class="font-bold md:mb-3" text-sm>Today's Weather</p>
     ${alert ? `<div style="color:red;font-weight:bold">${alert}</div>` : ""}
     Location: ${place}<br>
     <div class="flex items-center justify-center gap-2">
       Temperature: ${temp}${unit} 
-      <button id="toggleBtn" class="px-2 py-1 bg-white rounded border text-xs">${isCelsius ? "°F" : "°C"}</button>
+      <button id="toggleBtn" class="px-2 py-1 bg-white rounded border text-xs md:text-base">${isCelsius ? "°F" : "°C"}</button>
     </div>  
     Weather: ${style.icon} ${current.condition.text}<br>
     Wind: ${wind}<br>
@@ -102,14 +102,18 @@ function showForecast(data) {
 
   return `
     <div class="forecastContainer flex flex-col">
-      <h1 class="forecastHeading text-center text-white font-bold">Upcoming 6 Days Forecast</h1>
+      <p class="forecastHeading text-center text-white font-bold
+      xl:text-2xl xl:mt-12
+      md:mt-20 mb-5">Upcoming 6 Days Forecast</p>
 
-      <div class="forecastRow w-full flex flex-wrap justify-center items-center gap-4 mt-5">
+      <div class="forecastRow w-full flex flex-wrap justify-center items-center gap-3 mt-5">
         ${days.slice(1).map(day => {
           const style = getWeatherStyle(day.day.condition.text);
 
           return `
-            <div class="forecastCard w-50 h-36 bg-white rounded-lg p-3 text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div class="forecastCard bg-white rounded-lg text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between 
+            xl:w-50 h-36 p-3
+            md:w-50 h-36">
               <strong>${new Date(day.date).toLocaleDateString("en-US", {
                 weekday: "long",
                 year: "numeric",
