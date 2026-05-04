@@ -1,5 +1,17 @@
 const apiKey = "0196eb753b32483ebb3144743262904";
 
+const STORAGE_KEY = "recentCities";
+
+/* ---------- STORAGE ---------- */
+const getCities = () =>
+  JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+const saveCity = (city) => {
+  let cities = getCities().filter(c => c.toLowerCase() !== city.toLowerCase());
+  cities.unshift(city);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cities.slice(0, 5)));
+};
+
 let isCelsius = true;
 let weatherInfo = null;
 
@@ -29,6 +41,26 @@ function getWeatherStyle(text) {
   return match || { icon: "🌤️", bg: "#87CEEB" };
 }
 
+/* ---------- DROPDOWN ---------- */
+function renderDropdown(show = false) {
+  const cities = getCities();
+  const d = document.getElementById("recentDropdown");
+
+  if (!d) return;
+
+  if (cities.length === 0) {
+    d.style.display = "none";
+    d.innerHTML = "";
+    return;
+  }
+
+  d.innerHTML = cities
+    .map(c => `<div class="dropdown-item p-2 cursor-pointer hover:bg-gray-100">${c}</div>`)
+    .join("");
+
+  d.style.display = show ? "block" : "none"; // ✅ control visibility
+}
+
 /* ---------- MAIN WEATHER ---------- */
 function showWeather(data) {
   const current = data.current;
@@ -46,8 +78,10 @@ function showWeather(data) {
   resultBox.innerHTML = `
     ${alert ? `<div style="color:red;font-weight:bold">${alert}</div>` : ""}
     Location: ${place}<br>
-    Temperature: ${temp}${unit} 
-    <button id="toggleBtn">${isCelsius ? "°F" : "°C"}</button><br>
+    <div class="flex items-center justify-center gap-2">
+      Temperature: ${temp}${unit} 
+      <button id="toggleBtn" class="px-2 py-1 bg-white rounded border text-xs">${isCelsius ? "°F" : "°C"}</button>
+    </div>  
     Weather: ${style.icon} ${current.condition.text}<br>
     Wind: ${wind}<br>
     Humidity: ${current.humidity}%
@@ -67,32 +101,39 @@ function showForecast(data) {
   if (!days) return "No forecast data";
 
   return `
-    <h3>Forecast</h3>
-    ${days.slice(1).map(day => {
-      const style = getWeatherStyle(day.day.condition.text);
-      const unit = "°C";
+    <div class="forecastContainer flex flex-col">
+      <h1 class="forecastHeading text-center text-white font-bold">Upcoming 6 Days Forecast</h1>
 
-      const min = day.day.mintemp_c;
-      const max = day.day.maxtemp_c;
+      <div class="forecastRow w-full flex flex-wrap justify-center items-center gap-4 mt-5">
+        ${days.slice(1).map(day => {
+          const style = getWeatherStyle(day.day.condition.text);
 
-      return `
-        <div style="margin:10px;padding:10px;background:rgba(255,255,255,0.2);border-radius:8px;">
-          <strong>${new Date(day.date).toDateString()}</strong><br>
-          ${style.icon} ${day.day.condition.text}<br>
-          🌡️ ${min}${unit} - ${max}${unit}
-        </div>
-      `;
-    }).join("")}
+          return `
+            <div class="forecastCard w-50 h-36 bg-white rounded-lg p-3 text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+              <strong>${new Date(day.date).toLocaleDateString("en-US", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}</strong><br>
+              ${style.icon} ${day.day.condition.text}<br>
+              🌡️ ${day.day.mintemp_c}°C - ${day.day.maxtemp_c}°C
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
   `;
 }
 
 /* ---------- FETCH ---------- */
-function fetchWeather(url) {
+function fetchWeather(url, cityName) {
   fetch(url)
     .then(res => res.json())
     .then(data => {
       if (data.error) return resultBox.innerHTML = "City not found";
       weatherInfo = data;
+      renderDropdown();
       showWeather(data);
     })
     .catch(() => resultBox.innerHTML = "Error fetching weather");
@@ -101,6 +142,9 @@ function fetchWeather(url) {
 function getCityWeather() {
   const city = document.getElementById("city").value.trim();
   if (!city) return resultBox.innerHTML = "Enter a city name";
+
+  saveCity(city);        // ✅ store city
+  renderDropdown();      // ✅ update dropdown
 
   fetchWeather(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=7`);
 }
@@ -122,4 +166,44 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("currentBtn").onclick = () => {
     navigator.geolocation.getCurrentPosition(getLocationWeather, locationError);
   };
+
+  document.getElementById("city").addEventListener("focus", () => {
+    renderDropdown(true);
+  });
+
+  document.getElementById("recentDropdown").addEventListener("click", (e) => {
+  if (e.target.classList.contains("dropdown-item")) {
+    const cityInput = document.getElementById("city");
+    const dropdown = document.getElementById("recentDropdown");
+
+    cityInput.value = e.target.textContent;
+    dropdown.style.display = "none"; // ✅ hide dropdown
+
+    getCityWeather();
+  }
+});
+   document.getElementById("city").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const value = e.target.value.trim();
+    if (!value) return;
+
+    saveCity(value);
+    renderDropdown();
+    document.getElementById("recentDropdown").style.display = "block";
+
+    fetchWeather(
+      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${value}&days=7`
+    );
+  }
+});
+
+  const cityInput = document.getElementById("city");
+  const dropdown = document.getElementById("recentDropdown");
+
+  document.addEventListener("click", (e) => {
+    if (!cityInput.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = "none";
+    }
+  });
+  renderDropdown();
 });
