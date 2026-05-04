@@ -10,27 +10,48 @@
 </head>
 <body class="bg-black">
     
-    <h1 class="flex justify-center my-5 text-2xl text-white font-bold">Weather Updates</h1>
+    <p class="flex justify-center my-5 text-2xl text-white font-bold
+    xl:text-4xl
+    md:mt-15">Weather Updates</p>
 
 <div class="flex justify-evenly">
 
-    <div id="inputWrapper" class="relative bg-gray-400 w-80 h-60 mt-8 border-2 border-gray-700 p-4 rounded-xl flex flex-col gap-2 items-center justify-center text-center">
-    <label>Enter a City Name</label>
-    <input type="text" id="city" placeholder="Enter City" autocomplete="off" class="bg-white text-center border border-2">
-    <div id="recentDropdown" class="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md z-[1000] hidden max-h-[200px] overflow-y-auto"></div>
+    <div id="inputWrapper" class="
+    relative border-2 border-gray-700 rounded-xl bg-gray-400 xl:w-80 h-60 mt-8 p-4 flex flex-col gap-2 items-center justify-center text-center">
+    
+    <label class="text-black
+    md:text-2xl">Enter a City Name</label>
 
-    <button id="button" class="bg-white text-xs border border-1 text-1 p-1 mt-2 rounded-xl">Search Weather</button>
-    <button id="currentBtn" class="bg-white text-xs border border-1 p-1 rounded-xl">Current Location Weather</button>
+    <input type="text" id="city" placeholder="Enter City" autocomplete="off" class="
+    bg-white text-center border border-2
+    md:text-2xl">
+
+    <div id="recentDropdown" class="
+    absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md z-[1000] hidden max-h-[200px] overflow-y-auto"></div>
+
+    <button id="button" class="
+    bg-white border border-1 rounded-xl 
+    xl:text-xs text-1 p-1 mt-2
+    md:text-sm mt-5">Search Weather</button>
+
+    <button id="currentBtn" class="bg-white text-xs border border-1 p-1 rounded-xl
+    md:text-sm">Current Location Weather</button>
+
     </div>
 
     <div>
-    <section id="result" class="border-2 border-gray-700 rounded-xl w-82 h-60 overflow-hidden mt-8 flex flex-col justify-center items-center mx-auto text-center">
+
+    <section id="result" class="
+    border-2 border-gray-700 rounded-xl overflow-hidden flex flex-col justify-center items-center mx-auto text-center
+    xl:w-82 h-60 mt-8
+    md:w-82 h-60">
         <img src="Wimage.jpg" class="w-full h-full" />
     </section>
+
     </div>
 </div>
 
-<section id="forecast" class="mt-20 flex items-center justify-center"></section>
+<section id="forecast" class="flex items-center justify-center xl:mt-20"></section>
 
 </body>
 </html>
