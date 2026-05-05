@@ -113,7 +113,7 @@ function showForecast(data) {
           const style = getWeatherStyle(day.day.condition.text);
 
           return `
-            <div class="forecastCard bg-white rounded-lg text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between w-50 h-36
+            <div class="forecastCard bg-white rounded-lg text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between w-50 h-40
             xl:w-50 h-36 p-3
             md:w-50 h-36">
               <strong>${new Date(day.date).toLocaleDateString("en-US", {
@@ -124,6 +124,7 @@ function showForecast(data) {
               })}</strong><br>
               ${style.icon} ${day.day.condition.text}<br>
               🌡️ ${day.day.mintemp_c}°C - ${day.day.maxtemp_c}°C
+              💧 Humidity: ${day.day.avghumidity}%
             </div>
           `;
         }).join("")}
