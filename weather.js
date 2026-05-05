@@ -102,16 +102,18 @@ function showForecast(data) {
 
   return `
     <div class="forecastContainer flex flex-col">
-      <p class="forecastHeading text-center text-white font-bold
+      <p class="forecastHeading text-center text-white font-bold mt-12 mb-0
       xl:text-2xl xl:mt-12
       md:mt-20 mb-5">Upcoming 6 Days Forecast</p>
 
-      <div class="forecastRow w-full flex flex-wrap justify-center items-center gap-3 mt-5">
+      <div class="forecastRow w-full flex flex-wrap justify-center items-center gap-3 mt-3
+      xl:mt-5
+      md:mt-5">
         ${days.slice(1).map(day => {
           const style = getWeatherStyle(day.day.condition.text);
 
           return `
-            <div class="forecastCard bg-white rounded-lg text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between 
+            <div class="forecastCard bg-white rounded-lg text-center border border-gray-200 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between w-50 h-36
             xl:w-50 h-36 p-3
             md:w-50 h-36">
               <strong>${new Date(day.date).toLocaleDateString("en-US", {
